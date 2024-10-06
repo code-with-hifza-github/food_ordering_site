@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import "./Cart.css";
 import { StoreContext } from "../../context/StoreContext";
 import { useNavigate } from "react-router-dom";
+import { RiDeleteBin6Line } from "react-icons/ri";
 
 const Cart = () => {
   const { cartItems, food_list, removeFromCart, getTotalCartAmount } = useContext(StoreContext);
@@ -31,8 +32,8 @@ const Cart = () => {
                   <p>${item.price}</p>
                   <p>{cartItems[item._id]}</p>
                   <p>${item.price * cartItems[item._id]}</p>
-                  <p onClick={() => removeFromCart(item._id)} className="cross">
-                    x
+                  <p onClick={() => removeFromCart(item._id)} className="bin">
+                  <RiDeleteBin6Line />
                   </p>
                 </div>
                 <hr />
