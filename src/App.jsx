@@ -8,6 +8,9 @@ import Footer from "./components/footer/Footer";
 import LoginPopup from "./components/loginPopup/LoginPopup";
 import ExploreMenu from "./components/exploreMenu/ExploreMenu";
 import Search from "./components/pages/search/Search"; 
+import About from "./components/footerPages/about/About";
+import Delivery from "./components/footerPages/delivery/Delivery"; 
+import PrivacyPolicy from "./components/footerPages/privacyPolicy/PrivacyPolicy"; 
 
 const App = () => {
   const [showLogin, setShowLogin] = useState(false);
@@ -22,6 +25,9 @@ const App = () => {
           <Route path="/placeOrder" element={<PlaceOrder />} />
           <Route path="/exploremenu" element={<ExploreMenu />} />
           <Route path="/search" element={<Search />} /> 
+          <Route path="/about" element={<About />} />
+          <Route path="/delivery" element={<Delivery />} /> 
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         </Routes>
       </div>
       <Footer />

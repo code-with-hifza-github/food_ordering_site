@@ -61,3 +61,21 @@
 .food-item-counter img {
   width: 30px;
 }
+.food-item-price-container {
+  display: flex;
+  align-items: center;
+  gap: 50px;
+}
+.add-to-cart-btn {
+  background-color: tomato;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.add-to-cart-btn:hover {
+  background-color: rgb(238, 146, 129);
+}
