@@ -95,3 +95,11 @@
     display: none;
   }
 }
+
+@media (max-width: 720px) {
+  .navbar-menu {
+    display: none;
+  }
+  }
+
+  
