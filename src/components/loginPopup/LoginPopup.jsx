@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import "./LoginPopup.css";
 import assets from "../../assets/assets";
+import axios from "axios";
 
 const LoginPopup = ({ setShowLogin }) => {
   const [currState, setCurrState] = useState("Log In");
-
-  const [username, setUsername] = useState(""); // Username state added
+  const [username, setUsername] = useState(""); 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
@@ -33,7 +33,10 @@ const LoginPopup = ({ setShowLogin }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Logic for both Log In and Sign Up
+    axios.post('http://localhost:3001/users', { username, email, password })
+      .then(result => console.log(result)) 
+      .catch(err => console.log(err));
+
     if (currState === "Log In") {
       if (username && password.length >= 6) {
         const userDetails = {
@@ -41,17 +44,16 @@ const LoginPopup = ({ setShowLogin }) => {
           password,
         };
         console.log("User Details: ", userDetails);
-        setShowLogin(false); // Close popup after login
+        setShowLogin(false); 
       }
     } else {
-      // Logic for Sign Up
       if (!emailError && password.length >= 6) {
         const userDetails = {
           email,
           password,
         };
         console.log("User Details: ", userDetails);
-        setShowLogin(false); // Close popup after creating account
+        setShowLogin(false); 
       }
     }
   };
@@ -70,12 +72,11 @@ const LoginPopup = ({ setShowLogin }) => {
         <div className="login-popup-inputs">
           {currState === "Log In" ? (
             <>
-              {/* Change email input to username input for login */}
               <input
                 type="text"
-                placeholder="Enter Your Username" // Placeholder changed
-                value={username} // Use username state
-                onChange={(e) => setUsername(e.target.value)} // Update username state
+                placeholder="Enter Your Username" 
+                value={username} 
+                onChange={(e) => setUsername(e.target.value)}
                 required
               />
             </>
@@ -95,10 +96,11 @@ const LoginPopup = ({ setShowLogin }) => {
                 setEmail(e.target.value);
                 validateEmail(e.target.value); 
               }}
+              autoComplete="email" 
               required
             />
           )}
-          {currState === "Sign Up" && emailError && (  // Show email error only during sign up
+          {currState === "Sign Up" && emailError && (  
             <p className="error">{emailError}</p>
           )}
 
@@ -108,14 +110,14 @@ const LoginPopup = ({ setShowLogin }) => {
             value={password}
             onChange={(e) => {
               setPassword(e.target.value);
-              // Validate password strength only if signing up
               if (currState === "Sign Up") {
                 validatePassword(e.target.value); 
               }
             }}
+            autoComplete="current-password" 
             required
           />
-          {currState === "Sign Up" && passwordStrength && (  // Show password strength only during sign up
+          {currState === "Sign Up" && passwordStrength && (  
             <p className="strength">{passwordStrength}</p>
           )}
         </div>
