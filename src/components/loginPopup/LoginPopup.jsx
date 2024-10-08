@@ -5,12 +5,12 @@ import assets from "../../assets/assets";
 const LoginPopup = ({ setShowLogin }) => {
   const [currState, setCurrState] = useState("Log In");
 
+  const [username, setUsername] = useState(""); // Username state added
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordStrength, setPasswordStrength] = useState("");
 
-  
   const validateEmail = (email) => {
     const emailPattern = /\S+@\S+\.\S+/; 
     if (!emailPattern.test(email)) {
@@ -20,7 +20,6 @@ const LoginPopup = ({ setShowLogin }) => {
     }
   };
 
-  
   const validatePassword = (password) => {
     if (password.length < 6) {
       setPasswordStrength("Password is too weak.");
@@ -34,18 +33,26 @@ const LoginPopup = ({ setShowLogin }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-   
-    if (!emailError && password.length >= 6) {
-
-      const userDetails = {
-        email,
-        password,
-        
-      };
-      console.log("User Details: ", userDetails);
-
-      
-      setShowLogin(false);
+    // Logic for both Log In and Sign Up
+    if (currState === "Log In") {
+      if (username && password.length >= 6) {
+        const userDetails = {
+          username,
+          password,
+        };
+        console.log("User Details: ", userDetails);
+        setShowLogin(false); // Close popup after login
+      }
+    } else {
+      // Logic for Sign Up
+      if (!emailError && password.length >= 6) {
+        const userDetails = {
+          email,
+          password,
+        };
+        console.log("User Details: ", userDetails);
+        setShowLogin(false); // Close popup after creating account
+      }
     }
   };
 
@@ -62,7 +69,16 @@ const LoginPopup = ({ setShowLogin }) => {
         </div>
         <div className="login-popup-inputs">
           {currState === "Log In" ? (
-            <></>
+            <>
+              {/* Change email input to username input for login */}
+              <input
+                type="text"
+                placeholder="Enter Your Username" // Placeholder changed
+                value={username} // Use username state
+                onChange={(e) => setUsername(e.target.value)} // Update username state
+                required
+              />
+            </>
           ) : (
             <input
               type="text"
@@ -70,17 +86,21 @@ const LoginPopup = ({ setShowLogin }) => {
               required
             />
           )}
-          <input
-            type="email"
-            placeholder="Enter Your Email"
-            value={email}
-            onChange={(e) => {
-              setEmail(e.target.value);
-              validateEmail(e.target.value); 
-            }}
-            required
-          />
-          {emailError && <p className="error">{emailError}</p>}
+          {currState === "Sign Up" && (
+            <input
+              type="email"
+              placeholder="Enter Your Email"
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                validateEmail(e.target.value); 
+              }}
+              required
+            />
+          )}
+          {currState === "Sign Up" && emailError && (  // Show email error only during sign up
+            <p className="error">{emailError}</p>
+          )}
 
           <input
             type="password"
@@ -88,14 +108,19 @@ const LoginPopup = ({ setShowLogin }) => {
             value={password}
             onChange={(e) => {
               setPassword(e.target.value);
-              validatePassword(e.target.value); 
+              // Validate password strength only if signing up
+              if (currState === "Sign Up") {
+                validatePassword(e.target.value); 
+              }
             }}
             required
           />
-          {passwordStrength && <p className="strength">{passwordStrength}</p>}
+          {currState === "Sign Up" && passwordStrength && (  // Show password strength only during sign up
+            <p className="strength">{passwordStrength}</p>
+          )}
         </div>
 
-        <button>
+        <button type="submit">
           {currState === "Sign Up" ? "Create Account" : "Log In"}
         </button>
         <div className="login-popup-condition">
