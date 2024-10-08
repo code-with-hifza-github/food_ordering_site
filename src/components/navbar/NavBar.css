@@ -1,8 +1,10 @@
 .navbar {
   padding: 20px 0px;
-  display: flex;
   justify-content: space-between;
   align-items: center;
+  display: flex;
+  flex-wrap: wrap; 
+
 }
 .navbar .logo {
   width: 100px;
@@ -102,4 +104,26 @@
   }
   }
 
+@media (max-width: 460px) {
+  .navbar {
+    padding: 15px 0; 
+  }
   
+  .navbar-menu {
+    gap: 10px; 
+    font-size: 14px;
+  }
+
+  .navbar-right {
+    gap: 15px; 
+  }
+
+  .navbar-right img {
+    width: 20px; 
+  }
+
+  .navbar button {
+    padding: 5px 15px; 
+    font-size: 14px;
+  }
+}
