@@ -12,50 +12,64 @@ const LoginPopup = ({ setShowLogin }) => {
   const [passwordStrength, setPasswordStrength] = useState("");
 
   const validateEmail = (email) => {
-    const emailPattern = /\S+@\S+\.\S+/; 
+    const emailPattern = /\S+@\S+\.\S+/;
     if (!emailPattern.test(email)) {
       setEmailError("Invalid email format. Example: user@example.com");
+      console.log("Email validation failed!"); 
+      return false;
     } else {
       setEmailError("");
+      console.log("Email is valid!");
+      return true;
     }
   };
 
   const validatePassword = (password) => {
     if (password.length < 6) {
       setPasswordStrength("Password is too weak.");
+      console.log("Password too short!"); 
+      return false;
     } else if (password.length >= 6 && password.length < 10) {
       setPasswordStrength("Password strength is moderate.");
     } else {
       setPasswordStrength("Password is strong.");
     }
+    console.log("Password is valid!"); 
+    return true;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    axios.post('http://localhost:3001/users', { username, email, password })
-      .then(result => console.log(result)) 
-      .catch(err => console.log(err));
+    if (currState === "Log In" && username && password.length >= 6) {
+      const userDetails = {
+        username,
+        password,
+      };
+      console.log("Logging in User:", userDetails);
+      setShowLogin(false); 
+    } else if (currState === "Sign Up") {
+      
+      const isEmailValid = validateEmail(email);
+      const isPasswordValid = validatePassword(password);
 
-    if (currState === "Log In") {
-      if (username && password.length >= 6) {
+      if (isEmailValid && isPasswordValid) {
         const userDetails = {
           username,
-          password,
-        };
-        console.log("User Details: ", userDetails);
-        setShowLogin(false); 
-      }
-    } else {
-      if (!emailError && password.length >= 6) {
-        const userDetails = {
           email,
           password,
         };
-        console.log("User Details: ", userDetails);
-        setShowLogin(false); 
+        console.log("Signing up User:", userDetails);
+        setShowLogin(false);
+      } else {
+        console.log("Form validation failed! Check email and password.");
+        return;
       }
     }
+
+    axios.post('http://localhost:3001/users', { username, email, password })
+      .then(result => console.log(result))
+      .catch(err => console.log(err));
   };
 
   return (
@@ -84,6 +98,8 @@ const LoginPopup = ({ setShowLogin }) => {
             <input
               type="text"
               placeholder="Enter Your Name"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               required
             />
           )}
