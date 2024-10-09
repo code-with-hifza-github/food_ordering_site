@@ -1,18 +1,24 @@
 import React, { useContext, useState } from "react";
 import "./NavBar.css";
 import assets from "../../assets/assets";
-import { Link, useNavigate } from "react-router-dom"; 
+import { Link, useNavigate } from "react-router-dom";
 import { StoreContext } from "../context/StoreContext";
 
 const NavBar = ({ setShowLogin }) => {
-
   const [menu, setMenu] = useState("home");
 
   const { getTotalCartAmount, token, setToken } = useContext(StoreContext);
-  const navigate = useNavigate(); 
+
+  const navigate = useNavigate();
+
+  const logout = () => {
+    localStorage.removeItem("token");
+    setToken("");
+    navigate("/");
+  };
 
   const handleSearchClick = () => {
-    navigate("/search"); 
+    navigate("/search");
   };
 
   return (
@@ -47,8 +53,8 @@ const NavBar = ({ setShowLogin }) => {
         <img
           src={assets.search_icon}
           alt=""
-          onClick={handleSearchClick} 
-          style={{ cursor: "pointer" }} 
+          onClick={handleSearchClick}
+          style={{ cursor: "pointer" }}
         />
         <div className="navbar-search-icon">
           <Link to="/cart">
@@ -56,16 +62,24 @@ const NavBar = ({ setShowLogin }) => {
           </Link>
           <div className={getTotalCartAmount() === 0 ? "" : "dot"}></div>
         </div>
-        {!token?<button onClick={() => setShowLogin(true)}>Sign in</button>
-        : <div className="navbar-profile">
-          <img src={assets.profile_icon}/>
-          <ul className="nav-profile-dropdown">
-          <li><img src={assets.bag_icon}/><p>Orders</p></li>
-          <hr/>
-          <li><img src={assets.logout_icon}/><p>Logout</p></li>
-          </ul>
-          </div>}
-        
+        {!token ? (
+          <button onClick={() => setShowLogin(true)}>Sign in</button>
+        ) : (
+          <div className="navbar-profile">
+            <img src={assets.profile_icon} />
+            <ul className="nav-profile-dropdown">
+              <li>
+                <img src={assets.bag_icon} />
+                <p>Orders</p>
+              </li>
+              <hr />
+              <li onClick={logout}>
+                <img src={assets.logout_icon} />
+                <p>Logout</p>
+              </li>
+            </ul>
+          </div>
+        )}
       </div>
     </div>
   );
