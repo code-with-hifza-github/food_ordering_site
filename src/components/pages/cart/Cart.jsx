@@ -4,6 +4,7 @@ import { StoreContext } from "../../context/StoreContext";
 import { useNavigate } from "react-router-dom";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import LoginPopup from "../../loginPopup/LoginPopup";
+import assets from "../../../assets/assets"; 
 
 const Cart = () => {
   const { cartItems, food_list, removeFromCart, getTotalCartAmount, token } =
@@ -82,7 +83,17 @@ const Cart = () => {
           </div>
         </div>
       </div>
-      {showLogin && <LoginPopup setShowLogin={setShowLogin} />}{" "}
+      {showLogin && (
+        <div>
+          <img
+            onClick={() => setShowLogin(false)}
+            src={assets.cross_icon}
+            alt="Close"
+            style={{ cursor: "pointer", position: "absolute" }} 
+          />
+          <LoginPopup setShowLogin={setShowLogin} />
+        </div>
+      )}
     </div>
   );
 };
