@@ -6,23 +6,23 @@ import axios from "axios";
 
 const LoginPopup = ({ setShowLogin }) => {
   const { url, setToken } = useContext(StoreContext);
-
   const [currState, setCurrState] = useState("Log In");
 
-  // state variable for saving data
+  // State variable for saving data
   const [data, setData] = useState({
-    name: "",
-    email: "",
+    username: "",
     password: "",
+    email: "" 
   });
 
-  // pick data from input field and save in state variable
+  // Handle input changes
   const onChangeHandler = (event) => {
     const name = event.target.name;
     const value = event.target.value;
     setData((data) => ({ ...data, [name]: value }));
   };
 
+  // Handle form submission
   const onLogin = async (event) => {
     event.preventDefault();
     let newUrl = url;
@@ -31,14 +31,19 @@ const LoginPopup = ({ setShowLogin }) => {
     } else {
       newUrl += "/api/user/register";
     }
-    const response = await axios.post(newUrl, data);
+    
+    try {
+      const response = await axios.post(newUrl, data);
 
-    if (response.data.success) {
-      setToken(response.data.token);
-      localStorage.setItem("token", response.data.token);
-      setShowLogin(false);
-    } else {
-      alert(response.data.message);
+      if (response.data.success) {
+        setToken(response.data.token);
+        localStorage.setItem("token", response.data.token);
+        setShowLogin(false);
+      } else {
+        alert(response.data.message);
+      }
+    } catch (error) {
+      alert("An error occurred. Please try again.");
     }
   };
 
@@ -47,37 +52,56 @@ const LoginPopup = ({ setShowLogin }) => {
       <form onSubmit={onLogin} className="login-popup-container">
         <div className="login-popup-title">
           <h2>{currState}</h2>
-          <img onClick={() => setShowLogin(false)} src={assets.cross_icon} />
+          <img onClick={() => setShowLogin(false)} src={assets.cross_icon} alt="Close" />
         </div>
         <div className="login-popup-inputs">
           {currState === "Log In" ? (
-            <></>
+            <>
+              <input
+                name="username"
+                onChange={onChangeHandler}
+                value={data.username}
+                type="text"
+                placeholder="Enter Your Username"
+                required
+              />
+              <input
+                name="password"
+                onChange={onChangeHandler}
+                value={data.password}
+                type="password"
+                placeholder="Enter Your Password"
+                required
+              />
+            </>
           ) : (
-            <input
-              name="name"
-              onChange={onChangeHandler}
-              value={data.name}
-              type="text"
-              placeholder="Enter Your Name"
-              required
-            />
+            <>
+              <input
+                name="username"
+                onChange={onChangeHandler}
+                value={data.username}
+                type="text"
+                placeholder="Enter Your Username"
+                required
+              />
+              <input
+                name="email"
+                onChange={onChangeHandler}
+                value={data.email}
+                type="email"
+                placeholder="Enter Your Email"
+                required
+              />
+              <input
+                name="password"
+                onChange={onChangeHandler}
+                value={data.password}
+                type="password"
+                placeholder="Enter Your Password"
+                required
+              />
+            </>
           )}
-          <input
-            name="email"
-            onChange={onChangeHandler}
-            value={data.email}
-            type="email"
-            placeholder="Enter Your Email"
-            required
-          />
-          <input
-            name="password"
-            onChange={onChangeHandler}
-            value={data.password}
-            type="password"
-            placeholder="Enter Your Password"
-            required
-          />
         </div>
         <button type="submit">
           {currState === "Sign Up" ? "Create Account" : "Log In"}
@@ -88,7 +112,7 @@ const LoginPopup = ({ setShowLogin }) => {
         </div>
         {currState === "Log In" ? (
           <p>
-            Create new Accout?{" "}
+            Create new Account?{" "}
             <span onClick={() => setCurrState("Sign Up")}>Click here</span>
           </p>
         ) : (
