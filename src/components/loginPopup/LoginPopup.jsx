@@ -8,21 +8,26 @@ const LoginPopup = ({ setShowLogin }) => {
   const { url, setToken } = useContext(StoreContext);
   const [currState, setCurrState] = useState("Log In");
 
-  // State variable for saving data
   const [data, setData] = useState({
     username: "",
     password: "",
-    email: "" 
+    email: "",
   });
 
-  // Handle input changes
+  const [errors, setErrors] = useState({
+    username: "",
+    password: "",
+    email: "",
+  });
+
   const onChangeHandler = (event) => {
     const name = event.target.name;
     const value = event.target.value;
     setData((data) => ({ ...data, [name]: value }));
+
+    setErrors((errors) => ({ ...errors, [name]: "" }));
   };
 
-  // Handle form submission
   const onLogin = async (event) => {
     event.preventDefault();
     let newUrl = url;
@@ -31,7 +36,7 @@ const LoginPopup = ({ setShowLogin }) => {
     } else {
       newUrl += "/api/user/register";
     }
-    
+
     try {
       const response = await axios.post(newUrl, data);
 
@@ -40,10 +45,30 @@ const LoginPopup = ({ setShowLogin }) => {
         localStorage.setItem("token", response.data.token);
         setShowLogin(false);
       } else {
-        alert(response.data.message);
+        if (response.data.message.includes("Username")) {
+          setErrors((errors) => ({
+            ...errors,
+            username: response.data.message,
+          }));
+        } else if (response.data.message.includes("Email")) {
+          setErrors((errors) => ({ ...errors, email: response.data.message }));
+        } else if (response.data.message.includes("Password")) {
+          setErrors((errors) => ({
+            ...errors,
+            password: response.data.message,
+          }));
+        } else {
+          setErrors((errors) => ({
+            ...errors,
+            general: response.data.message,
+          }));
+        }
       }
     } catch (error) {
-      alert("An error occurred. Please try again.");
+      setErrors((errors) => ({
+        ...errors,
+        general: "An error occurred. Please try again.",
+      }));
     }
   };
 
@@ -52,7 +77,11 @@ const LoginPopup = ({ setShowLogin }) => {
       <form onSubmit={onLogin} className="login-popup-container">
         <div className="login-popup-title">
           <h2>{currState}</h2>
-          <img onClick={() => setShowLogin(false)} src={assets.cross_icon} alt="Close" />
+          <img
+            onClick={() => setShowLogin(false)}
+            src={assets.cross_icon}
+            alt="Close"
+          />
         </div>
         <div className="login-popup-inputs">
           {currState === "Log In" ? (
@@ -65,6 +94,9 @@ const LoginPopup = ({ setShowLogin }) => {
                 placeholder="Enter Your Username"
                 required
               />
+              {errors.username && (
+                <p className="error-message">{errors.username}</p>
+              )}
               <input
                 name="password"
                 onChange={onChangeHandler}
@@ -73,6 +105,9 @@ const LoginPopup = ({ setShowLogin }) => {
                 placeholder="Enter Your Password"
                 required
               />
+              {errors.password && (
+                <p className="error-message">{errors.password}</p>
+              )}
             </>
           ) : (
             <>
@@ -84,6 +119,9 @@ const LoginPopup = ({ setShowLogin }) => {
                 placeholder="Enter Your Username"
                 required
               />
+              {errors.username && (
+                <p className="error-message">{errors.username}</p>
+              )}
               <input
                 name="email"
                 onChange={onChangeHandler}
@@ -92,6 +130,7 @@ const LoginPopup = ({ setShowLogin }) => {
                 placeholder="Enter Your Email"
                 required
               />
+              {errors.email && <p className="error-message">{errors.email}</p>}
               <input
                 name="password"
                 onChange={onChangeHandler}
@@ -100,6 +139,9 @@ const LoginPopup = ({ setShowLogin }) => {
                 placeholder="Enter Your Password"
                 required
               />
+              {errors.password && (
+                <p className="error-message">{errors.password}</p>
+              )}
             </>
           )}
         </div>

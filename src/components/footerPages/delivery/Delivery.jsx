@@ -1,9 +1,7 @@
-import React from "react"; 
-import "./Delivery.css"; 
+import React from "react";
+import "./Delivery.css";
 
 const Delivery = () => {
-
-
   return (
     <div className="delivery-container">
       <h1 className="delivery-title">Delivery Information</h1>

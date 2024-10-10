@@ -1,16 +1,16 @@
 import React, { useContext } from "react";
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
 import "./FoodItem.css";
 import assets from "../../assets/assets";
 import { StoreContext } from "../../components/context/StoreContext";
 
 const FoodItem = ({ id, name, price, description, image }) => {
   const { cartItems, addToCart, removeFromCart } = useContext(StoreContext);
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const handleAddToCartClick = () => {
-    addToCart(id); 
-    navigate("/cart"); 
+    addToCart(id);
+    navigate("/cart");
     window.scrollTo(0, 0);
   };
 
@@ -42,8 +42,10 @@ const FoodItem = ({ id, name, price, description, image }) => {
         </div>
         <p className="food-item-desc">{description}</p>
         <div className="food-item-price-container">
-        <p className="food-item-price">${price}</p>
-        <button className="add-to-cart-btn" onClick={handleAddToCartClick}>Add to Cart</button> 
+          <p className="food-item-price">${price}</p>
+          <button className="add-to-cart-btn" onClick={handleAddToCartClick}>
+            Add to Cart
+          </button>
         </div>
       </div>
     </div>
@@ -51,7 +53,3 @@ const FoodItem = ({ id, name, price, description, image }) => {
 };
 
 export default FoodItem;
-
-
-
-

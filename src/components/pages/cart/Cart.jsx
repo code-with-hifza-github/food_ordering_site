@@ -1,13 +1,25 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import "./Cart.css";
 import { StoreContext } from "../../context/StoreContext";
 import { useNavigate } from "react-router-dom";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import LoginPopup from "../../loginPopup/LoginPopup";
 
 const Cart = () => {
-  const { cartItems, food_list, removeFromCart, getTotalCartAmount } = useContext(StoreContext);
-
+  const { cartItems, food_list, removeFromCart, getTotalCartAmount, token } =
+    useContext(StoreContext);
+  const [showLogin, setShowLogin] = useState(false);
   const navigate = useNavigate();
+
+  const isLoggedIn = !!token;
+
+  const handleProceedToCheckout = () => {
+    if (!isLoggedIn) {
+      setShowLogin(true);
+    } else {
+      navigate("/placeOrder");
+    }
+  };
 
   return (
     <div className="cart">
@@ -25,15 +37,15 @@ const Cart = () => {
         {food_list.map((item, index) => {
           if (cartItems[item._id] > 0)
             return (
-              <div>
+              <div key={item._id}>
                 <div className="cart-items-title cart-items-item">
-                  <img src={item.image} />
+                  <img src={item.image} alt={item.name} />
                   <p>{item.name}</p>
                   <p>${item.price}</p>
                   <p>{cartItems[item._id]}</p>
                   <p>${item.price * cartItems[item._id]}</p>
                   <p onClick={() => removeFromCart(item._id)} className="bin">
-                  <RiDeleteBin6Line />
+                    <RiDeleteBin6Line />
                   </p>
                 </div>
                 <hr />
@@ -51,14 +63,14 @@ const Cart = () => {
           <hr />
           <div className="cart-total-details">
             <p>Delivery Fee</p>
-            <p>${getTotalCartAmount()===0?0:20}</p>
+            <p>${getTotalCartAmount() === 0 ? 0 : 20}</p>
           </div>
           <hr />
           <div className="cart-total-details">
             <b>Total</b>
-            <b>${getTotalCartAmount()===0?0:getTotalCartAmount()+20}</b>
+            <b>${getTotalCartAmount() === 0 ? 0 : getTotalCartAmount() + 20}</b>
           </div>
-          <button onClick={()=>navigate('/placeOrder')}>Proceed To CheckOut</button>
+          <button onClick={handleProceedToCheckout}>Proceed To CheckOut</button>
         </div>
         <div className="cart-promocode">
           <div>
@@ -70,6 +82,7 @@ const Cart = () => {
           </div>
         </div>
       </div>
+      {showLogin && <LoginPopup setShowLogin={setShowLogin} />}{" "}
     </div>
   );
 };

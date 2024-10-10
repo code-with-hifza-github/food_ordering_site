@@ -3,13 +3,11 @@ import "./Header.css";
 import { useNavigate } from "react-router-dom";
 
 const Header = () => {
-
-  
   const navigate = useNavigate();
 
   const navigator = () => {
-    navigate("/ExploreMenu")
-  }
+    navigate("/ExploreMenu");
+  };
   return (
     <div className="header">
       <div className="header-content">

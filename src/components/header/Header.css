@@ -39,7 +39,6 @@
     max-width: 45%;
   }
 }
-
 @media (max-width: 750px) {
   .header-content {
     max-width: 75%;

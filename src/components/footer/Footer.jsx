@@ -7,23 +7,23 @@ const Footer = () => {
   const navigate = useNavigate();
 
   const handleLogoClick = () => {
-    navigate("/"); 
+    navigate("/");
     window.scrollTo(0, 0);
   };
 
   const handleAboutClick = () => {
-    navigate("/about"); 
-    window.scrollTo(0, 0); 
+    navigate("/about");
+    window.scrollTo(0, 0);
   };
 
   const handleDeliveryClick = () => {
-    navigate("/delivery"); 
-    window.scrollTo(0, 0); 
+    navigate("/delivery");
+    window.scrollTo(0, 0);
   };
 
   const handlePrivacyPolicyClick = () => {
-    navigate("/privacy-policy"); 
-    window.scrollTo(0, 0); 
+    navigate("/privacy-policy");
+    window.scrollTo(0, 0);
   };
 
   return (
@@ -56,10 +56,21 @@ const Footer = () => {
         <div className="footer-content-center">
           <h2>COMPANY</h2>
           <ul>
-            <li onClick={handleLogoClick} style={{ cursor: "pointer" }}>Home</li>
-            <li onClick={handleAboutClick} style={{ cursor: "pointer" }}>About</li> 
-            <li onClick={handleDeliveryClick} style={{ cursor: "pointer" }}>Delivery</li> 
-            <li onClick={handlePrivacyPolicyClick} style={{ cursor: "pointer" }}>Privacy Policy</li> 
+            <li onClick={handleLogoClick} style={{ cursor: "pointer" }}>
+              Home
+            </li>
+            <li onClick={handleAboutClick} style={{ cursor: "pointer" }}>
+              About
+            </li>
+            <li onClick={handleDeliveryClick} style={{ cursor: "pointer" }}>
+              Delivery
+            </li>
+            <li
+              onClick={handlePrivacyPolicyClick}
+              style={{ cursor: "pointer" }}
+            >
+              Privacy Policy
+            </li>
           </ul>
         </div>
         <div className="footer-content-right">
