@@ -25,11 +25,12 @@ const LoginPopup = ({ setShowLogin }) => {
     const value = event.target.value;
     setData((data) => ({ ...data, [name]: value }));
 
-    setErrors((errors) => ({ ...errors, [name]: "" }));
+    setErrors((errors) => ({ ...errors, [name]: "" }));   //...........
   };
 
   const onLogin = async (event) => {
     event.preventDefault();
+
     let newUrl = url;
     if (currState === "Log In") {
       newUrl += "/api/user/login";
@@ -46,28 +47,20 @@ const LoginPopup = ({ setShowLogin }) => {
         setShowLogin(false);
       } else {
         if (response.data.message.includes("Username")) {
-          setErrors((errors) => ({
-            ...errors,
-            username: response.data.message,
-          }));
-        } else if (response.data.message.includes("Email")) {
+          setErrors((errors) => ({ ...errors, username: response.data.message }));
+        } 
+        else if (response.data.message.includes("Email")) {
           setErrors((errors) => ({ ...errors, email: response.data.message }));
-        } else if (response.data.message.includes("Password")) {
-          setErrors((errors) => ({
-            ...errors,
-            password: response.data.message,
-          }));
-        } else {
-          setErrors((errors) => ({
-            ...errors,
-            general: response.data.message,
-          }));
+        } 
+        else if (response.data.message.includes("Password")) {
+          setErrors((errors) => ({ ...errors, password: response.data.message }));
+        } 
+        else {
+          setErrors((errors) => ({ ...errors, general: response.data.message }));
         }
       }
     } catch (error) {
-      setErrors((errors) => ({
-        ...errors,
-        general: "An error occurred. Please try again.",
+      setErrors((errors) => ({ ...errors, general: "An error occurred. Please try again.",
       }));
     }
   };
@@ -139,8 +132,7 @@ const LoginPopup = ({ setShowLogin }) => {
                 placeholder="Enter Your Password"
                 required
               />
-              {errors.password && (
-                <p className="error-message">{errors.password}</p>
+              {errors.password && ( <p className="error-message">{errors.password}</p>
               )}
             </>
           )}
